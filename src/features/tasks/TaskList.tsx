@@ -1,4 +1,14 @@
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
+import { 
+  DndContext, 
+  closestCenter, 
+  KeyboardSensor, 
+  PointerSensor, 
+  MouseSensor, // Agregado
+  TouchSensor, // Agregado
+  useSensor, 
+  useSensors, 
+  type DragEndEvent 
+} from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import type { Task } from '../../types';
 import { SortableTaskItem } from './SortableTaskItem';
@@ -13,15 +23,24 @@ interface TaskListProps {
 }
 
 export const TaskList = ({ tasks, onToggle, onDelete, setTasks, currentFilter }: TaskListProps) => {
-  // Solo habilitamos el sensor de movimiento si el filtro es "all"
   const isAllFilter = currentFilter === 'all';
 
+  // Configuración de sensores optimizada para desktop y móvil
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      // Si no es "all", ponemos una restricción de distancia imposible para que no inicie el drag
+    useSensor(MouseSensor, {
+      // Restricción para desktop
       activationConstraint: !isAllFilter ? { distance: 9999 } : undefined,
     }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+    useSensor(TouchSensor, {
+      // Restricción para móviles: 
+      // Delay de 250ms permite diferenciar entre SCROLL y DRAG
+      activationConstraint: isAllFilter 
+        ? { delay: 250, tolerance: 5 } 
+        : { distance: 9999 },
+    }),
+    useSensor(KeyboardSensor, { 
+      coordinateGetter: sortableKeyboardCoordinates 
+    })
   );
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -45,7 +64,11 @@ export const TaskList = ({ tasks, onToggle, onDelete, setTasks, currentFilter }:
   if (tasks.length === 0) return <p style={{ textAlign: 'center', marginTop: '20px' }}>No hay tareas.</p>;
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+    <DndContext 
+      sensors={sensors} 
+      collisionDetection={closestCenter} 
+      onDragEnd={handleDragEnd}
+    >
       <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {tasks.map((task) => (
@@ -54,7 +77,7 @@ export const TaskList = ({ tasks, onToggle, onDelete, setTasks, currentFilter }:
               task={task} 
               onToggle={onToggle} 
               onDelete={onDelete}
-              isDraggable={isAllFilter} // <--- Pasamos esta prop nueva
+              isDraggable={isAllFilter}
             />
           ))}
         </div>

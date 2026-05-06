@@ -11,9 +11,17 @@ export const SortableTaskItem = ({ task, onToggle, onDelete, isDraggable }: any)
     <div ref={dnd.setNodeRef} style={style}>
       <div style={{ display: 'flex', alignItems: 'center', padding: '15px', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+          {/* El Handle: Agregamos touchAction 'none' para habilitar el drag en móvil */}
           <div 
             {...(isDraggable && !state.isEditing ? { ...dnd.attributes, ...dnd.listeners } : {})} 
-            style={{ cursor: isDraggable && !state.isEditing ? 'grab' : 'default', marginRight: '12px', color: '#a0aec0' }}
+            style={{ 
+              cursor: isDraggable && !state.isEditing ? 'grab' : 'default', 
+              marginRight: '12px', 
+              color: '#a0aec0',
+              touchAction: isDraggable && !state.isEditing ? 'none' : 'auto', // CRÍTICO PARA MÓVIL
+              padding: '5px', // Mejora el área de contacto en pantallas táctiles
+              userSelect: 'none'
+            }}
           >
             ⠿
           </div>
