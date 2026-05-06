@@ -3,7 +3,7 @@ import {
   signInWithEmailAndPassword, 
   signOut, 
   GoogleAuthProvider, 
-  signInWithPopup 
+  signInWithRedirect // Cambiamos Popup por Redirect
 } from "firebase/auth";
 import { auth } from "./firebase";
 
@@ -25,5 +25,6 @@ export const logoutUser = () => {
 // Login con Google (Extra Credit)
 export const loginWithGoogle = () => {
   const provider = new GoogleAuthProvider();
-  return signInWithPopup(auth, provider);
+  // Al usar Redirect, la consola quedará limpia de errores Cross-Origin
+  return signInWithRedirect(auth, provider);
 };
