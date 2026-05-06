@@ -175,6 +175,7 @@ Para desplegar:
 ![Descripción del prompt](./screenshots/PruebaFirebaseFirestone/Prompt1.png)
 
 **Respuesta:**
+
 ![Descripción de la respuesta](./screenshots/PruebaFirebaseFirestone/Resp1.png)
 ![Descripción de la respuesta](./screenshots/PruebaFirebaseFirestone/Codigo1-1.png)
 ![Descripción de la respuesta](./screenshots/PruebaFirebaseFirestone/Codigo1-2.png)
