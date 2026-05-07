@@ -1,4 +1,14 @@
+# Variables de entorno (Contienen tus llaves)
 .env
+.env.local
+.env.*.local
 
+# Dependencias
 node_modules/
+
+# Build (ESTO ES LO QUE ESTÁ CAUSANDO EL PROBLEMA)
+dist/
+build/
+
+# Vercel
 .vercel
